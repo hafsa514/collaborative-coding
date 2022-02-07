@@ -1,7 +1,13 @@
 namespace SpriteKind {
     export const Instructor = SpriteKind.create()
     export const attack = SpriteKind.create()
+    export const sto = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.attack, SpriteKind.sto, function (sprite, otherSprite) {
+    projectile2.destroy(effects.spray, 100)
+    music.beamUp.play()
+    info.changeScoreBy(10)
+})
 function food (healer: boolean) {
     if (info.life() < 2) {
         projectile = sprites.createProjectileFromSide(img`
@@ -45,7 +51,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, user, 50, 0)
-    info.changeScoreBy(1)
     mySprite.setKind(SpriteKind.attack)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
@@ -53,25 +58,97 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
     info.player1.changeLifeBy(-1)
     music.smallCrash.play()
 })
-function enemy () {
-    mySprite2 = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.Enemy)
+function faster () {
+    if (info.score() >= 10) {
+        other_car = sprites.createProjectileFromSide(img`
+            . . . . . . . 8 8 8 8 8 . . . . 
+            . . . . . 8 8 6 6 6 6 6 8 . . . 
+            . . . . 8 8 6 6 6 6 6 6 6 8 . . 
+            . . . . 8 9 7 6 6 6 6 6 7 b 8 . 
+            . . 8 8 9 9 7 6 6 6 6 6 7 9 b 8 
+            . 8 6 6 9 9 7 7 6 6 6 6 7 9 9 8 
+            8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
+            8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
+            8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
+            8 6 8 8 8 8 b b b b 8 b b 8 b 8 
+            8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
+            8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
+            8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
+            8 8 8 8 f f f 8 8 8 8 f f f 8 8 
+            . 8 8 f b b c f 8 8 f b b c f . 
+            . . . . c f f . . . . c f f . . 
+            `, -50, 0)
+        other_car.setPosition(160, randint(20, 120))
+    }
+    if (info.score() >= 20) {
+        other_car = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . 6 6 6 6 6 6 6 6 . . 
+            . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+            . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+            . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+            . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+            . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+            . 6 6 6 6 6 8 b b b b 8 b b b 8 
+            . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+            . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+            . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+            . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+            . 8 8 8 8 f f f 8 8 8 8 f f f f 
+            . . . 8 f f f f f 8 8 f f f f f 
+            . . . . f f f f . . . . f f f . 
+            . . . . . . . . . . . . . . . . 
+            `, -80, 0)
+        other_car.setPosition(160, 0)
+    }
+    if (info.score() >= 35) {
+        other_car.setPosition(160, randint(20, 120))
+        other_car = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . 6 6 6 6 6 6 6 6 . . 
+            . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+            . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+            . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+            . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+            . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+            . 6 6 6 6 6 8 b b b b 8 b b b 8 
+            . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+            . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+            . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+            . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+            . 8 8 8 8 f f f 8 8 8 8 f f f f 
+            . . . 8 f f f f f 8 8 f f f f f 
+            . . . . f f f f . . . . f f f . 
+            . . . . . . . . . . . . . . . . 
+            `, -100, 0)
+    }
+    if (info.score() >= 80) {
+        other_car.setPosition(160, randint(20, 120))
+        other_car = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . 6 6 6 6 6 6 6 6 . . 
+            . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+            . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+            . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+            . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+            . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+            . 6 6 6 6 6 8 b b b b 8 b b b 8 
+            . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+            . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+            . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+            . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+            . 8 8 8 8 f f f 8 8 8 8 f f f f 
+            . . . 8 f f f f f 8 8 f f f f f 
+            . . . . f f f f . . . . f f f . 
+            . . . . . . . . . . . . . . . . 
+            `, -120, 0)
+    }
+}
+function enemy (en: Sprite) {
+    stone = [sprites.castle.rock0, sprites.castle.rock1, sprites.castle.rock2]
+    projectile2 = sprites.createProjectileFromSide(stone._pickRandom(), -50, 0)
+    projectile2.setPosition(160, randint(20, 120))
+    projectile2.setKind(SpriteKind.sto)
 }
 info.onLifeZero(function () {
     music.bigCrash.play()
@@ -82,11 +159,35 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     info.player1.changeLifeBy(1)
     music.baDing.play()
 })
+sprites.onOverlap(SpriteKind.sto, SpriteKind.Player, function (sprite, otherSprite) {
+    projectile2.destroy(effects.spray, 100)
+    music.beamUp.play()
+    info.changeScoreBy(-10)
+    animation.runMovementAnimation(
+    user,
+    animation.animationPresets(animation.shake),
+    100,
+    false
+    )
+})
+sprites.onDestroyed(SpriteKind.Projectile, function (sprite) {
+    info.changeScoreBy(1)
+})
+let stone: Image[] = []
 let other_car: Sprite = null
-let mySprite2: Sprite = null
 let mySprite: Sprite = null
 let projectile: Sprite = null
+let projectile2: Sprite = null
 let user: Sprite = null
+let you = game.askForString("Do you want a tutorial for this game", 3)
+if (you == "yes" || (you == "Yes" || you == "y")) {
+    game.splash("the is a car running on the road ")
+    game.splash("you can move your car with buttons \"W A S D\"")
+    game.splash("Avoid the car it will gives you points ")
+    game.splash("shooting the stones will give you \"10\" point and hitting them will give you -10")
+    game.splash("you can shoot the stone with \"A\" button Pressed ")
+    game.splash("Are you ready", "Good luck")
+}
 user = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . 2 2 2 2 2 2 2 2 . . . . 
@@ -230,6 +331,9 @@ scene.setBackgroundImage(img`
 controller.moveSprite(user)
 user.setStayInScreen(true)
 info.setLife(3)
+game.onUpdateInterval(5000, function () {
+    enemy(mySprite)
+})
 game.onUpdateInterval(2000, function () {
     other_car = sprites.createProjectileFromSide(img`
         . . . . . . . . . . . . . . . . 
@@ -251,4 +355,8 @@ game.onUpdateInterval(2000, function () {
         `, -20, 0)
     other_car.setPosition(160, randint(20, 120))
     food(true)
+    faster()
+})
+forever(function () {
+    music.playMelody("C5 B A G F E D C ", 115)
 })
