@@ -169,7 +169,7 @@ function game_update (user: Sprite) {
         `)
     controller.moveSprite(user)
     user.setStayInScreen(true)
-    info.setLife(3)
+    info.setLife(4)
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     mySprite = sprites.createProjectileFromSprite(img`
